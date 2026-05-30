@@ -86,10 +86,13 @@ struct MenuBarPanelView: View {
             }
         }
         .padding(10)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: VisualDesign.cornerRadius, style: .continuous))
+        .background {
+            RoundedRectangle(cornerRadius: VisualDesign.cornerRadius, style: .continuous)
+                .fill(VisualDesign.statusColor(for: cpuMetric).opacity(0.045))
+        }
         .overlay {
             RoundedRectangle(cornerRadius: VisualDesign.cornerRadius, style: .continuous)
-                .stroke(VisualDesign.statusColor(for: cpuMetric).opacity(0.18), lineWidth: 1)
+                .stroke(VisualDesign.statusColor(for: cpuMetric).opacity(0.22), lineWidth: 1)
         }
     }
 
