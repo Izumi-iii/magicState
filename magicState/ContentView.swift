@@ -18,15 +18,16 @@ struct ContentView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 header
+                CPUHistoryCardView(
+                    metric: cpuMetric,
+                    values: viewModel.cpuHistory,
+                    summary: CPUHistorySummary(values: viewModel.cpuHistory)
+                )
 
                 LazyVGrid(columns: columns, spacing: 14) {
-                    ForEach(Array(viewModel.cards.enumerated()), id: \.offset) { _, metric in
+                    ForEach(Array(secondaryMetrics.enumerated()), id: \.offset) { _, metric in
                         MetricCardView(metric: metric) {
-                            if metric.title == "CPU" {
-                                HistoryBarChart(values: viewModel.cpuHistory)
-                            } else {
-                                Spacer(minLength: 48)
-                            }
+                            Spacer(minLength: 48)
                         }
                     }
                 }
@@ -34,6 +35,14 @@ struct ContentView: View {
             .padding(24)
         }
         .frame(minWidth: 760, minHeight: 520)
+    }
+
+    private var cpuMetric: MetricDisplay {
+        viewModel.cards.first { $0.title == "CPU" } ?? MetricDisplay(title: "CPU", value: MetricFormatting.unavailable, availability: .unavailable)
+    }
+
+    private var secondaryMetrics: [MetricDisplay] {
+        viewModel.cards.filter { $0.title != "CPU" }
     }
 
     private var header: some View {

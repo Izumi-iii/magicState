@@ -6,6 +6,8 @@ public final class DashboardViewModel: ObservableObject {
     @Published public private(set) var cards: [MetricDisplay]
     @Published public private(set) var cpuHistory: [Double]
 
+    private static let cpuHistoryLimit = 1_800
+
     private let service: SystemMonitoring
     private var timer: Timer?
 
@@ -44,8 +46,8 @@ public final class DashboardViewModel: ObservableObject {
             cards = Self.cards(from: snapshot)
             if let usage = snapshot.cpu?.usage {
                 cpuHistory.append(usage)
-                if cpuHistory.count > 30 {
-                    cpuHistory.removeFirst(cpuHistory.count - 30)
+                if cpuHistory.count > Self.cpuHistoryLimit {
+                    cpuHistory.removeFirst(cpuHistory.count - Self.cpuHistoryLimit)
                 }
             }
         } catch {
