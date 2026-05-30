@@ -10,9 +10,22 @@
 		92373BCE2FCAC8F100F8A609 /* magicState.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = magicState.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		92D3A0012FCD000100000001 /* Exceptions for "magicState" folder in "magicState" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"2026-05-30-macos-menu-bar-monitor.md",
+			);
+			target = 92373BCD2FCAC8F100F8A609 /* magicState */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		92373BD02FCAC8F100F8A609 /* magicState */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				92D3A0012FCD000100000001 /* Exceptions for "magicState" folder in "magicState" target */,
+			);
 			path = magicState;
 			sourceTree = "<group>";
 		};
@@ -261,8 +274,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.test.magicState;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.izumiiii.magicState;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -292,8 +305,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.test.magicState;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.izumiiii.magicState;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
