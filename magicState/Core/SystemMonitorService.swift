@@ -85,6 +85,52 @@ public struct SystemSnapshot: Equatable, Sendable {
     )
 }
 
-public protocol SystemMonitoring: Sendable {
+public protocol SystemMonitoring {
     func snapshot() async throws -> SystemSnapshot
+}
+
+public protocol CPUReading { func read() -> CPUMetric? }
+public protocol MemoryReading { func read() -> MemoryMetric? }
+public protocol DiskReading { func read() -> DiskMetric? }
+public protocol NetworkReading { func read() -> NetworkMetric? }
+public protocol BatteryReading { func read() -> BatteryMetric? }
+public protocol SensorReading { func read() -> SensorMetric? }
+
+extension CPUReader: CPUReading {}
+extension NetworkReader: NetworkReading {}
+
+public final class SystemMonitorService: SystemMonitoring {
+    private let cpuReader: CPUReading
+    private let memoryReader: MemoryReading
+    private let diskReader: DiskReading
+    private let networkReader: NetworkReading
+    private let batteryReader: BatteryReading
+    private let sensorReader: SensorReading
+
+    public init(
+        cpuReader: CPUReading = CPUReader(),
+        memoryReader: MemoryReading = MemoryReader(),
+        diskReader: DiskReading = DiskReader(),
+        networkReader: NetworkReading = NetworkReader(),
+        batteryReader: BatteryReading = BatteryReader(),
+        sensorReader: SensorReading = SensorReader()
+    ) {
+        self.cpuReader = cpuReader
+        self.memoryReader = memoryReader
+        self.diskReader = diskReader
+        self.networkReader = networkReader
+        self.batteryReader = batteryReader
+        self.sensorReader = sensorReader
+    }
+
+    public func snapshot() async throws -> SystemSnapshot {
+        SystemSnapshot(
+            cpu: cpuReader.read(),
+            memory: memoryReader.read(),
+            disk: diskReader.read(),
+            network: networkReader.read(),
+            battery: batteryReader.read(),
+            sensors: sensorReader.read()
+        )
+    }
 }
