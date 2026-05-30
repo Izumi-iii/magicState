@@ -8,14 +8,42 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var viewModel = DashboardViewModel(service: SystemMonitorService())
+
+    private let columns = [
+        GridItem(.adaptive(minimum: 230), spacing: 14)
+    ]
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                header
+
+                LazyVGrid(columns: columns, spacing: 14) {
+                    ForEach(Array(viewModel.cards.enumerated()), id: \.offset) { _, metric in
+                        MetricCardView(metric: metric) {
+                            if metric.title == "CPU" {
+                                HistoryBarChart(values: viewModel.cpuHistory)
+                            } else {
+                                Spacer(minLength: 48)
+                            }
+                        }
+                    }
+                }
+            }
+            .padding(24)
         }
-        .padding()
+        .frame(minWidth: 760, minHeight: 520)
+    }
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("magicState")
+                .font(.system(size: 34, weight: .bold, design: .rounded))
+            Text("Live Mac system dashboard")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
     }
 }
 

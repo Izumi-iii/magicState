@@ -13,5 +13,6 @@ struct magicStateApp: App {
         WindowGroup {
             ContentView()
         }
+        .defaultSize(width: 900, height: 620)
     }
 }
