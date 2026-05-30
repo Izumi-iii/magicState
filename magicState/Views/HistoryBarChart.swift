@@ -10,8 +10,13 @@ struct CPUHistoryCardView: View {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack(spacing: 8) {
-                        Text(metric.title)
-                            .font(.headline)
+                        Label {
+                            Text(metric.title)
+                                .font(.headline)
+                        } icon: {
+                            Image(systemName: VisualDesign.symbolName(for: metric))
+                                .foregroundStyle(VisualDesign.statusColor(for: metric))
+                        }
                         availabilityDot
                     }
 
@@ -34,17 +39,22 @@ struct CPUHistoryCardView: View {
                 }
             }
 
-            CPUHistoryChartView(values: values)
+            CPUHistoryChartView(values: values, tint: VisualDesign.statusColor(for: metric))
         }
         .padding(18)
         .frame(minHeight: 260, alignment: .topLeading)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: VisualDesign.cornerRadius, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: VisualDesign.cornerRadius, style: .continuous)
+                .stroke(VisualDesign.statusColor(for: metric).opacity(0.18), lineWidth: 1)
+        }
     }
 
     private var availabilityDot: some View {
         Circle()
-            .fill(metric.availability == .value ? Color.green : Color.secondary)
+            .fill(VisualDesign.statusColor(for: metric))
             .frame(width: 8, height: 8)
+            .shadow(color: VisualDesign.statusColor(for: metric).opacity(0.35), radius: 3)
             .accessibilityLabel(metric.availability == .value ? "Available" : "Unavailable")
     }
 
@@ -58,12 +68,13 @@ struct CPUHistoryCardView: View {
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 10)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: VisualDesign.cornerRadius, style: .continuous))
     }
 }
 
 struct CPUHistoryChartView: View {
     let values: [Double]
+    var tint: Color = VisualDesign.cpu
     var height: CGFloat = 132
     var showsAxisLabels = true
 
@@ -75,6 +86,12 @@ struct CPUHistoryChartView: View {
                     thresholdLine(in: proxy.size)
                     chartArea(in: proxy.size)
                     chartLine(in: proxy.size)
+                    currentPoint(in: proxy.size)
+                    if values.isEmpty {
+                        Text("Collecting CPU history...")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
             .frame(height: height)
@@ -118,7 +135,7 @@ struct CPUHistoryChartView: View {
         areaPath(in: size)
             .fill(
                 LinearGradient(
-                    colors: [Color.accentColor.opacity(0.32), Color.accentColor.opacity(0.04)],
+                    colors: [tint.opacity(0.32), tint.opacity(0.04)],
                     startPoint: .top,
                     endPoint: .bottom
                 )
@@ -127,7 +144,19 @@ struct CPUHistoryChartView: View {
 
     private func chartLine(in size: CGSize) -> some View {
         linePath(in: size)
-            .stroke(Color.accentColor, style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round))
+            .stroke(tint, style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round))
+    }
+
+    private func currentPoint(in size: CGSize) -> some View {
+        Group {
+            if let point = chartPoints(in: size).last {
+                Circle()
+                    .fill(tint)
+                    .frame(width: 8, height: 8)
+                    .shadow(color: tint.opacity(0.35), radius: 4)
+                    .position(point)
+            }
+        }
     }
 
     private func linePath(in size: CGSize) -> Path {

@@ -16,7 +16,7 @@ struct ContentView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
+            VStack(alignment: .leading, spacing: VisualDesign.dashboardSpacing) {
                 header
                 CPUHistoryCardView(
                     metric: cpuMetric,
@@ -34,6 +34,7 @@ struct ContentView: View {
             }
             .padding(24)
         }
+        .background(VisualDesign.dashboardBackground.ignoresSafeArea())
         .frame(minWidth: 760, minHeight: 520)
     }
 

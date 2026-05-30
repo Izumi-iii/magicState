@@ -54,6 +54,7 @@ struct MenuBarPanelView: View {
 
             CPUHistoryChartView(
                 values: viewModel.cpuHistory,
+                tint: VisualDesign.statusColor(for: cpuMetric),
                 height: 58,
                 showsAxisLabels: false
             )
@@ -66,7 +67,11 @@ struct MenuBarPanelView: View {
             }
         }
         .padding(10)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: VisualDesign.cornerRadius, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: VisualDesign.cornerRadius, style: .continuous)
+                .stroke(VisualDesign.statusColor(for: cpuMetric).opacity(0.18), lineWidth: 1)
+        }
     }
 
     private func summaryLabel(_ title: String, value: Double) -> some View {
@@ -81,9 +86,10 @@ struct MenuBarPanelView: View {
 
     private func metricRow(_ metric: MetricDisplay) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: 10) {
-            Circle()
-                .fill(metric.availability == .value ? Color.green : Color.secondary)
-                .frame(width: 7, height: 7)
+            Image(systemName: VisualDesign.symbolName(for: metric))
+                .font(.caption)
+                .foregroundStyle(VisualDesign.statusColor(for: metric))
+                .frame(width: 16)
 
             Text(metric.title)
                 .font(.subheadline)

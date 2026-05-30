@@ -7,8 +7,13 @@ struct MetricCardView<Content: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text(metric.title)
-                    .font(.headline)
+                Label {
+                    Text(metric.title)
+                        .font(.headline)
+                } icon: {
+                    Image(systemName: VisualDesign.symbolName(for: metric))
+                        .foregroundStyle(VisualDesign.statusColor(for: metric))
+                }
                 Spacer()
                 availabilityDot
             }
@@ -28,15 +33,20 @@ struct MetricCardView<Content: View>: View {
 
             content()
         }
-        .padding(16)
+        .padding(VisualDesign.cardPadding)
         .frame(minHeight: 150, alignment: .topLeading)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: VisualDesign.cornerRadius, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: VisualDesign.cornerRadius, style: .continuous)
+                .stroke(VisualDesign.statusColor(for: metric).opacity(0.18), lineWidth: 1)
+        }
     }
 
     private var availabilityDot: some View {
         Circle()
-            .fill(metric.availability == .value ? Color.green : Color.secondary)
+            .fill(VisualDesign.statusColor(for: metric))
             .frame(width: 8, height: 8)
+            .shadow(color: VisualDesign.statusColor(for: metric).opacity(0.35), radius: 3)
             .accessibilityLabel(metric.availability == .value ? "Available" : "Unavailable")
     }
 }
