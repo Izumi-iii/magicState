@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var viewModel = DashboardViewModel(service: SystemMonitorService())
+    @ObservedObject var viewModel: DashboardViewModel
 
     private let columns = [
         GridItem(.adaptive(minimum: 230), spacing: 14)
@@ -48,5 +48,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(viewModel: DashboardViewModel(service: SystemMonitorService(), autoStart: false))
 }
