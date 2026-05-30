@@ -105,8 +105,28 @@ public final class DashboardViewModel: ObservableObject {
         guard let metric, metric.isSupported else {
             return MetricDisplay(title: "Sensors", value: MetricFormatting.notSupported, availability: .notSupported)
         }
+        if let thermalState = metric.thermalState {
+            return MetricDisplay(title: "Sensors", value: thermalState.displayName, detail: "Public thermal state")
+        }
         let temperature = metric.temperatureCelsius.map { String(format: "%.0f°C", $0) } ?? MetricFormatting.unavailable
         let fan = metric.fanRPM.map { "\($0) RPM" } ?? MetricFormatting.unavailable
         return MetricDisplay(title: "Sensors", value: temperature, detail: fan)
+    }
+}
+
+private extension ThermalState {
+    var displayName: String {
+        switch self {
+        case .nominal:
+            "Nominal"
+        case .fair:
+            "Fair"
+        case .serious:
+            "Serious"
+        case .critical:
+            "Critical"
+        case .unknown:
+            "Unknown"
+        }
     }
 }

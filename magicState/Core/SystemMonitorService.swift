@@ -48,12 +48,22 @@ public struct BatteryMetric: Equatable, Sendable {
 public struct SensorMetric: Equatable, Sendable {
     public var temperatureCelsius: Double?
     public var fanRPM: Int?
+    public var thermalState: ThermalState?
     public var isSupported: Bool
-    public init(temperatureCelsius: Double?, fanRPM: Int?, isSupported: Bool) {
+    public init(temperatureCelsius: Double?, fanRPM: Int?, thermalState: ThermalState? = nil, isSupported: Bool) {
         self.temperatureCelsius = temperatureCelsius
         self.fanRPM = fanRPM
+        self.thermalState = thermalState
         self.isSupported = isSupported
     }
+}
+
+public enum ThermalState: Equatable, Sendable {
+    case nominal
+    case fair
+    case serious
+    case critical
+    case unknown
 }
 
 public struct SystemSnapshot: Equatable, Sendable {
@@ -81,7 +91,7 @@ public struct SystemSnapshot: Equatable, Sendable {
         disk: DiskMetric(usedBytes: 128_849_018_880, totalBytes: 256_000_000_000),
         network: NetworkMetric(uploadBytesPerSecond: 1_048_576, downloadBytesPerSecond: 2_097_152),
         battery: BatteryMetric(level: 0.76, isCharging: true),
-        sensors: SensorMetric(temperatureCelsius: nil, fanRPM: nil, isSupported: false)
+        sensors: SensorMetric(temperatureCelsius: nil, fanRPM: nil, thermalState: .nominal, isSupported: true)
     )
 }
 

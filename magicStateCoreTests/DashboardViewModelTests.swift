@@ -11,7 +11,9 @@ final class DashboardViewModelTests: XCTestCase {
         let cards = await viewModel.cards
         XCTAssertEqual(cards.map(\.title), ["CPU", "Memory", "Disk", "Network", "Battery", "Sensors"])
         XCTAssertEqual(cards[0].value, "42%")
-        XCTAssertEqual(cards[5].availability, .notSupported)
+        XCTAssertEqual(cards[5].value, "Nominal")
+        XCTAssertEqual(cards[5].detail, "Public thermal state")
+        XCTAssertEqual(cards[5].availability, .value)
     }
 
     func testRefreshKeepsDashboardUsableWhenServiceFails() async {

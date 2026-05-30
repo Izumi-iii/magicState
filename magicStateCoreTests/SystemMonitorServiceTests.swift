@@ -22,10 +22,11 @@ final class SystemMonitorServiceTests: XCTestCase {
         XCTAssertEqual(snapshot.sensors?.isSupported, true)
     }
 
-    func testDefaultSensorReaderReportsUnsupported() {
+    func testDefaultSensorReaderReportsPublicThermalState() {
         let sensor = SensorReader().read()
 
-        XCTAssertEqual(sensor?.isSupported, false)
+        XCTAssertEqual(sensor?.isSupported, true)
+        XCTAssertNotNil(sensor?.thermalState)
         XCTAssertNil(sensor?.temperatureCelsius)
         XCTAssertNil(sensor?.fanRPM)
     }
