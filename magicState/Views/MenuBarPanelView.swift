@@ -8,9 +8,10 @@ struct MenuBarPanelView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             header
+            cpuOverview
 
             VStack(spacing: 10) {
-                ForEach(viewModel.cards, id: \.title) { metric in
+                ForEach(secondaryMetrics, id: \.title) { metric in
                     metricRow(metric)
                 }
             }
@@ -26,7 +27,7 @@ struct MenuBarPanelView: View {
             }
         }
         .padding(16)
-        .frame(width: 320)
+        .frame(width: 360)
     }
 
     private var header: some View {
@@ -37,6 +38,45 @@ struct MenuBarPanelView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    private var cpuMetric: MetricDisplay {
+        viewModel.cards.first { $0.title == "CPU" } ?? MetricDisplay(title: "CPU", value: MetricFormatting.unavailable, availability: .unavailable)
+    }
+
+    private var secondaryMetrics: [MetricDisplay] {
+        viewModel.cards.filter { $0.title != "CPU" }
+    }
+
+    private var cpuOverview: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            metricRow(cpuMetric)
+
+            CPUHistoryChartView(
+                values: viewModel.cpuHistory,
+                height: 58,
+                showsAxisLabels: false
+            )
+
+            let summary = CPUHistorySummary(values: viewModel.cpuHistory)
+            HStack {
+                summaryLabel("Avg", value: summary.average)
+                Spacer()
+                summaryLabel("Peak", value: summary.peak)
+            }
+        }
+        .padding(10)
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+    }
+
+    private func summaryLabel(_ title: String, value: Double) -> some View {
+        HStack(spacing: 4) {
+            Text(title)
+                .foregroundStyle(.secondary)
+            Text(MetricFormatting.percent(value))
+                .fontWeight(.semibold)
+        }
+        .font(.caption2.monospacedDigit())
     }
 
     private func metricRow(_ metric: MetricDisplay) -> some View {

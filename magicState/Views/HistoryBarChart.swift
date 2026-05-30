@@ -64,6 +64,8 @@ struct CPUHistoryCardView: View {
 
 struct CPUHistoryChartView: View {
     let values: [Double]
+    var height: CGFloat = 132
+    var showsAxisLabels = true
 
     var body: some View {
         VStack(spacing: 8) {
@@ -75,17 +77,19 @@ struct CPUHistoryChartView: View {
                     chartLine(in: proxy.size)
                 }
             }
-            .frame(height: 132)
+            .frame(height: height)
 
-            HStack {
-                Text("30 min ago")
-                Spacer()
-                Text("80%")
-                Spacer()
-                Text("now")
+            if showsAxisLabels {
+                HStack {
+                    Text("30 min ago")
+                    Spacer()
+                    Text("80%")
+                    Spacer()
+                    Text("now")
+                }
+                .font(.caption2)
+                .foregroundStyle(.secondary)
             }
-            .font(.caption2)
-            .foregroundStyle(.secondary)
         }
         .accessibilityHidden(true)
     }
