@@ -28,6 +28,7 @@ struct MenuBarPanelView: View {
         }
         .padding(16)
         .frame(width: 360)
+        .background(panelBackground)
     }
 
     private var header: some View {
@@ -38,6 +39,24 @@ struct MenuBarPanelView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    private var panelBackground: some View {
+        ZStack {
+            Image("MenuPanelBackground")
+                .resizable()
+                .scaledToFill()
+                .opacity(0.18)
+                .saturation(0.9)
+                .blur(radius: 0.6)
+                .allowsHitTesting(false)
+
+            Rectangle()
+                .fill(.regularMaterial)
+                .opacity(0.72)
+                .allowsHitTesting(false)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
     private var cpuMetric: MetricDisplay {
